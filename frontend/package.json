@@ -1,8 +1,9 @@
 {
-  "name": "frondend",
+  "name": "frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@react-oauth/google": "^0.12.1",
     "@sanity/client": "^6.17.2",
     "@sanity/image-url": "^1.0.2",
     "@testing-library/jest-dom": "^5.17.0",
