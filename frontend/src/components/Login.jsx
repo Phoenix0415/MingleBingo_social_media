@@ -4,12 +4,37 @@ import { useNavigate } from 'react-router-dom';
 import{FcGoogle} from 'react-icons/fc';
 import shareVideo from '../assets/share.mp4';
 import logo from '../assets/logowhite.png';
+import { client } from '../client.ts';
+import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
+  const navigate = useNavigate();
   const responseGoogle = (response) => {
-    console.log(response);
-  }
-  
+    console.log("Login Response:", response); 
+
+    // Decode JWT token
+    const decoded = jwtDecode(response.credential);
+    console.log("Decoded JWT:", decoded);
+
+    localStorage.setItem('user', JSON.stringify(decoded));
+
+    const { name, sub: googleId, picture: imageUrl } = decoded;
+
+    const doc = {
+      _id: googleId,
+      _type:'user',
+      userName: name,
+      image: imageUrl,
+    }
+
+    client.createIfNotExists(doc).then(() => {
+      navigate('/', {replace: true});
+    }).catch(error => {
+      console.error('Failed to create or find the document:', error.message);
+      // Handle the error further if needed
+    }); 
+  } 
+
   return (
     <div className='flex justify-start items-center flex-col h-screen'>
       <div className='relative w-full h-full'>
