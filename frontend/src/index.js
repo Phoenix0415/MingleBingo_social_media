@@ -11,7 +11,7 @@ const rootElement = createRoot(root);
 
 rootElement.render(
     <React.StrictMode>
-        <GoogleOAuthProvider clientId=""> {/* Make sure to replace "your-client-id-here" with your actual Google client ID */}
+        <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_API_TOKEN}>
             <Router>
                 <App />
             </Router>
