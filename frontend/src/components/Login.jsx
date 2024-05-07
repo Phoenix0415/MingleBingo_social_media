@@ -9,6 +9,7 @@ import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
   const navigate = useNavigate();
+
   const responseGoogle = (response) => {
     console.log("Login Response:", response); 
 
@@ -16,23 +17,25 @@ const Login = () => {
     const decoded = jwtDecode(response.credential);
     console.log("Decoded JWT:", decoded);
 
-    localStorage.setItem('user', JSON.stringify(decoded));
-
     const { name, sub: googleId, picture: imageUrl } = decoded;
+
+    localStorage.setItem('user', JSON.stringify({name, googleId, imageUrl}));
 
     const doc = {
       _id: googleId,
-      _type:'user',
-      userName: name,
+      _type: 'user',
+      username: name, 
       image: imageUrl,
-    }
+    };
 
-    client.createIfNotExists(doc).then(() => {
+    client.createIfNotExists(doc)
+    .then(() => {
       navigate('/', {replace: true});
-    }).catch(error => {
+    })
+    .catch(error => {
       console.error('Failed to create or find the document:', error.message);
-      // Handle the error further if needed
-    }); 
+      console.log(error); 
+    });
   } 
 
   return (
